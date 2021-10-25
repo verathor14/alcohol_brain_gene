@@ -1,0 +1,272 @@
+---
+title: "Sample Characteristics"
+---
+
+
+
+```{r}
+library(dplyr) # Run install.packages("tidyverse") to get this
+library(tidyr) # Run install.packages("tidyr") to get this
+library(ggplot2)
+library("reshape") # Run install.packages("reshape") to get this
+```
+
+Import the csv with characteristics and other info from GEO sample page
+
+```{r}
+
+sample_characteristics <- read.csv("alcohol_hippocampus_samples.csv", header = TRUE)
+
+```
+
+Save n for calculations
+
+```{r}
+
+n_samples <- nrow(sample_characteristics)
+
+```
+
+
+How many alcoholics to controls?
+
+```{r}
+
+n_alcoholics <- sum(sample_characteristics$phenotype == "alcoholic")
+n_controls <- sum(sample_characteristics$phenotype == "control")
+
+print(paste("% alcoholic = ", (n_alcoholics / n_samples)*100))
+print(paste("% controls = ", (n_controls / n_samples)*100))
+
+```
+Look at sex
+
+```{r}
+
+n_female <- sum(sample_characteristics$sex == "female")
+n_male <- sum(sample_characteristics$sex == "male")
+
+print(paste("% female = ", (n_female / n_samples)*100))
+print(paste("% male = ", (n_male / n_samples)*100))
+
+```
+```{r}
+
+female_alcoholic <- sample_characteristics %>%
+  filter(sex == "female") %>%
+  filter(phenotype == "alcoholic")
+
+male_alcoholic <- sample_characteristics %>%
+  filter(sex == "male") %>%
+  filter(phenotype == "alcoholic")
+
+
+print(paste("% alcoholics in female = ", (nrow(female_alcoholic) / n_female)*100))
+print(paste("% alcoholics in male = ", (nrow(male_alcoholic) / n_male)*100))
+
+```
+Look at age
+
+```{r}
+
+print(paste("Min age:", min(sample_characteristics$age)))
+print(paste("Max age:", max(sample_characteristics$age)))
+print(paste("Median age:", median(sample_characteristics$age)))
+
+```
+
+Check the percentages with cirrhosis
+
+```{r}
+
+print(paste("N cirrhosis:", sum(sample_characteristics$cirrhosis == "yes")))
+print(paste("% cirrhosis = ", (sum(sample_characteristics$cirrhosis == "yes") / n_samples)*100))
+
+```
+Check smoking
+
+```{r}
+
+print(paste("N active smoker:", sum(sample_characteristics$smoker == "yes")))
+print(paste("N former smoker:", sum(sample_characteristics$smoker == "former")))
+print(paste("N non smoker:", sum(sample_characteristics$smoker == "no")))
+print(paste("N unknown smoker:", sum(sample_characteristics$smoker == "unknown")))
+
+
+print(paste("% active smoker = ", (sum(sample_characteristics$smoker == "yes") / n_samples)*100))
+print(paste("% former smoker = ", (sum(sample_characteristics$smoker == "former") / n_samples)*100))
+print(paste("% non smoker = ", (sum(sample_characteristics$smoker == "no") / n_samples)*100))
+print(paste("% unknown = ", (sum(sample_characteristics$smoker == "unknown") / n_samples)*100))
+
+```
+
+Look at post mortem interval
+
+```{r}
+
+print(paste("Min interval:", min(sample_characteristics$PMI)))
+print(paste("Max interval:", max(sample_characteristics$PMI)))
+print(paste("Median interval:", median(sample_characteristics$PMI)))
+
+
+```
+```{r}
+
+print(paste("Median brain pH:", median(sample_characteristics$brain.pH)))
+
+```
+
+Get the values again with respect to phenotype so that we can know if there are significant differences between them other than alcohol use.
+
+```{r}
+
+alcoholic <- sample_characteristics %>%
+  filter(phenotype == "alcoholic")
+
+control <- sample_characteristics %>%
+  filter(phenotype == "control")
+
+```
+
+
+=============================================================
+ALcoholic
+
+```{r}
+
+n_female <- sum(alcoholic$sex == "female")
+n_male <- sum(alcoholic$sex == "male")
+
+print(paste("% female = ", (n_female / nrow(alcoholic))*100))
+print(paste("% male = ", (n_male / nrow(alcoholic))*100))
+
+```
+
+Look at age
+
+```{r}
+
+print(paste("Min age:", min(alcoholic$age)))
+print(paste("Max age:", max(alcoholic$age)))
+print(paste("Median age:", median(alcoholic$age)))
+
+```
+
+Check the percentages with cirrhosis
+
+```{r}
+
+print(paste("N cirrhosis:", sum(alcoholic$cirrhosis == "yes")))
+print(paste("% cirrhosis = ", (sum(alcoholic$cirrhosis == "yes") / nrow(alcoholic))*100))
+
+```
+Check smoking
+
+```{r}
+
+print(paste("N active smoker:", sum(alcoholic$smoker == "yes")))
+print(paste("N former smoker:", sum(alcoholic$smoker == "former")))
+print(paste("N non smoker:", sum(alcoholic$smoker == "no")))
+print(paste("N unknown smoker:", sum(alcoholic$smoker == "unknown")))
+
+
+print(paste("% active smoker = ", (sum(alcoholic$smoker == "yes") / n_samples)*100))
+print(paste("% former smoker = ", (sum(alcoholic$smoker == "former") / n_samples)*100))
+print(paste("% non smoker = ", (sum(alcoholic$smoker == "no") / n_samples)*100))
+print(paste("% unknown = ", (sum(alcoholic$smoker == "unknown") / n_samples)*100))
+
+```
+
+Look at post mortem interval
+
+```{r}
+
+print(paste("Min interval:", min(alcoholic$PMI)))
+print(paste("Max interval:", max(alcoholic$PMI)))
+print(paste("Median interval:", median(alcoholic$PMI)))
+
+
+```
+
+
+```{r}
+
+print(paste("Median brain pH:", median(alcoholic$brain.pH)))
+
+```
+
+
+
+====================================================================
+Controls
+
+```{r}
+
+n_female <- sum(control$sex == "female")
+n_male <- sum(control$sex == "male")
+
+print(paste("% female = ", (n_female / nrow(control))*100))
+print(paste("% male = ", (n_male / nrow(control))*100))
+
+```
+
+Look at age
+
+```{r}
+
+print(paste("Min age:", min(control$age)))
+print(paste("Max age:", max(control$age)))
+print(paste("Median age:", median(control$age)))
+
+```
+
+Check the percentages with cirrhosis
+
+```{r}
+
+print(paste("N cirrhosis:", sum(control$cirrhosis == "yes")))
+print(paste("% cirrhosis = ", (sum(control$cirrhosis == "yes") / nrow(control))*100))
+
+```
+Check smoking
+
+```{r}
+
+print(paste("N active smoker:", sum(control$smoker == "yes")))
+print(paste("N former smoker:", sum(control$smoker == "former")))
+print(paste("N non smoker:", sum(control$smoker == "no")))
+print(paste("N unknown smoker:", sum(control$smoker == "unknown")))
+
+
+print(paste("% active smoker = ", (sum(control$smoker == "yes") / n_samples)*100))
+print(paste("% former smoker = ", (sum(control$smoker == "former") / n_samples)*100))
+print(paste("% non smoker = ", (sum(control$smoker == "no") / n_samples)*100))
+print(paste("% unknown = ", (sum(control$smoker == "unknown") / n_samples)*100))
+
+```
+
+Look at post mortem interval
+
+```{r}
+
+print(paste("Min interval:", min(control$PMI)))
+print(paste("Max interval:", max(control$PMI)))
+print(paste("Median interval:", median(control$PMI)))
+
+
+```
+
+
+```{r}
+
+print(paste("Median brain pH:", median(control$brain.pH)))
+
+```
+
+
+
+
+
+
+
+
